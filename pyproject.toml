@@ -1,6 +1,6 @@
 [project]
 name = "trano-optimization"
-version = "0.1.0"
+version = "0.2.0"
 description = "Optimal control, moving horizon estimation and simulation of Modelica models with rumoca, CasADi and IPOPT."
 authors = [{ name = "Ando Andriamamonjy", email = "andoludovic.andriamamonjy@gmail.com" }]
 requires-python = ">=3.11,<4.0"

@@ -694,7 +694,7 @@ source = { git = "https://github.com/CogniPilot/rumoca?subdirectory=crates%2Frum
 
 [[package]]
 name = "trano-optimization"
-version = "0.1.0"
+version = "0.2.0"
 source = { editable = "." }
 default-groups = "all"
 dependencies = [
