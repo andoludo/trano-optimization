@@ -22,7 +22,9 @@ dependencies = [
     "pydantic>=2.13.4,<3",
     "numpy>=2.0,<3",
     "casadi>=3.6.7,<4",
-    "rumoca>=0.10.3,<0.11",
+    # 0.10.2 is the last release on PyPI; the CasADi export of connected models (trano's FastModel) needs the
+    # 0.10.3 of the source below
+    "rumoca>=0.10.2,<0.11",
 ]
 
 [project.urls]
