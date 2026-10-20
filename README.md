@@ -13,6 +13,20 @@ model = CasadiModel.from_modelica(source, "house.building_mpc")
 result = OptimalControl(model).solve(initial_state, disturbances, comfort_lower, price)
 ```
 
+## Installation
+
+```bash
+pip install trano-optimization
+```
+
+This installs rumoca 0.10.2 from PyPI, which translates flat models. The models of trano's FastModel libraries are
+made of connected components, which rumoca exports to CasADi from 0.10.3 only, not released yet: install it from
+its main branch (Rust toolchain), as `[tool.uv.sources]` of `pyproject.toml` does.
+
+```bash
+pip install "rumoca @ git+https://github.com/CogniPilot/rumoca@33c21141791cbc341f4788ff6353d2f49d1c740a#subdirectory=crates/rumoca-bind-python"
+```
+
 ## Development
 
 ```bash
