@@ -116,11 +116,15 @@ class CasadiModel:
     description: ModelDescription
 
     @classmethod
-    def from_modelica(cls, source: str, model: str) -> Self:
-        """Translate ``model`` of the Modelica ``source`` text with rumoca."""
+    def from_modelica(cls, source: str, model: str, roots: Sequence[Path | str] = ()) -> Self:
+        """Translate ``model`` of the Modelica ``source`` text with rumoca.
+
+        ``roots`` are the folders of the Modelica libraries the source uses without holding them (rumoca reads every
+        Modelica file below a root, so give the folder of the library itself, e.g. ``fastsmoothbuildings.LIBRARY``).
+        """
         import rumoca
 
-        translated = rumoca.Session().loads(source, model=model)
+        translated = rumoca.Session(roots=[str(root) for root in roots]).loads(source, model=model)
         export = translated.to_casadi()
         inputs = _names(export.input_names)
         description = ModelDescription(
@@ -134,8 +138,8 @@ class CasadiModel:
         return cls(rhs=export.rhs, description=description)
 
     @classmethod
-    def from_file(cls, path: Path | str, model: str) -> Self:
-        return cls.from_modelica(Path(path).read_text(), model)
+    def from_file(cls, path: Path | str, model: str, roots: Sequence[Path | str] = ()) -> Self:
+        return cls.from_modelica(Path(path).read_text(), model, roots)
 
     def derivatives(
         self, time: float, state: np.ndarray, inputs: np.ndarray, parameters: np.ndarray | None = None
