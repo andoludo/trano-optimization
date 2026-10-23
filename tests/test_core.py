@@ -1,5 +1,7 @@
 """The building blocks: translation, roles, collocation, simulation against known solutions, closed loop prices."""
 
+from pathlib import Path
+
 import numpy as np
 import pytest
 
@@ -55,6 +57,18 @@ def test_the_derivatives_are_those_of_the_equations(tank: CasadiModel) -> None:
     assert tank.derivatives(0.0, np.array([10.0, 0.0]), np.array([0.5]), np.array([1e-3])) == pytest.approx(
         [0.5 - 1e-2, 0.0]
     )
+
+
+def test_a_model_uses_a_library_read_from_its_folder(tmp_path: Path) -> None:
+    """The library is not in the source: rumoca reads it from the folder given as a root."""
+    library = tmp_path / "Decay"
+    library.mkdir()
+    (library / "package.mo").write_text(DECAY.replace("package Decay", "within;\npackage Decay", 1))
+    source = "model Plant\n  input Real u;\n  Decay.Tank tank(k=1e-3);\nequation\n  tank.u = u;\nend Plant;\n"
+
+    plant = CasadiModel.from_modelica(source, "Plant", roots=[library])
+
+    assert plant.derivatives(0.0, np.array([10.0, 0.0]), np.array([0.5])) == pytest.approx([0.5 - 1e-2, 0.0])
 
 
 def test_array_inputs_are_named_element_by_element() -> None:
